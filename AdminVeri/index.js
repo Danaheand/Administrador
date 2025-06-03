@@ -2,7 +2,12 @@ const express = require('express');
 const path = require('path');
 
 const app = express();
-const port = 3000;
+const port = process.env.PORT || 3000;
+
+app.listen(port, () => {
+    console.log(`Servidor corriendo en http://localhost:${port}`);
+});
+
 
 app.use(express.json())    // <==== parse request body as JSON
 
@@ -148,7 +153,3 @@ app.put('/api/Producto/:id', async (req, res) => {
   }
 });
 
-
-app.listen(port, () => {
-  console.log(`Servidor corriendo en http://localhost:${port}`);
-});
