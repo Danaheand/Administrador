@@ -1,0 +1,22 @@
+<header class="header-placeholder">
+  <div class="header-placeholder">
+    <a href="/Dashboard.html" class="logo-link" aria-label="Ir a la página principal">
+      <div class="logo" style="cursor:pointer; display:flex; align-items:center; gap: 0.5rem;">
+        <img src="/imagenes/logo.png" alt="Logo Trago Loco" />
+        <span>Panel Admin</span>
+      </div>
+    </a>
+  </div>
+  <div class="text-end">
+    <!-- Botón hamburguesa solo visible en móvil -->
+    <button class="menu-toggle" aria-label="Mostrar menú" onclick="toggleMenu()">☰</button>
+    <!-- Botón cerrar sesión, oculto en móvil y visible en escritorio -->
+    <button class="logout-btn" onclick="cerrarSesion()">🔒 Cerrar Sesión</button>
+  </div>
+  <!-- Menú desplegable en móvil -->
+  <div id="mobileMenu" class="mobile-menu" style="display:none;">
+    <button class="logout-btn" onclick="cerrarSesion()">🔒 Cerrar Sesión</button>
+  </div>
+</header>
+
+

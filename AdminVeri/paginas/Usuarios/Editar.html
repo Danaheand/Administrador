@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Editar Usuario</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@400;600&display=swap" rel="stylesheet" />
+  <link href="/css/site.css" rel="stylesheet" />
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+
+<body class="bg-dark text-light">
+<script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const isAdmin = localStorage.getItem("isAdmin");
+      if (isAdmin !== "true") {
+        window.location.href = "/Index.html";
+      }
+    });
+  </script>
+  <!-- Header -->
+  <div id="header-placeholder"></div>
+
+  <div class="container mt-5">
+    <div class="text-center mb-4">
+      <h1 class="fw-bold text-warning">
+        <i class="bi bi-pencil-fill"></i> Editar Usuario
+      </h1>
+    </div>
+
+    <form id="editarUsuarioForm" novalidate>
+      <div class="card shadow p-4 rounded dark-container mx-auto" style="max-width:700px;">
+
+        <div class="mb-3">
+          <label class="form-label fw-bold text-warning">Cédula / RUC</label>
+          <input type="text" class="form-control bg-dark text-light border-warning" id="usuCiRuc" disabled />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label fw-bold text-warning">Nombre Completo</label>
+          <input type="text" class="form-control bg-dark text-light border-warning" id="usuNombre" required />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label fw-bold text-warning">Email</label>
+          <input type="email" class="form-control bg-dark text-light border-warning" id="usuEmail" required />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label fw-bold text-warning">Teléfono</label>
+          <input type="text" class="form-control bg-dark text-light border-warning" id="usuTelefono" maxlength="15"
+            required />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label fw-bold text-warning">Dirección</label>
+          <input type="text" class="form-control bg-dark text-light border-warning" id="usuDireccion" required />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label fw-bold text-warning">Ciudad</label>
+          <select id="usuCiudad" class="form-select bg-dark text-light border-warning" required>
+            <option value="">Seleccione una ciudad</option>
+            <option value="UIO">Quito</option>
+            <option value="GYE">Guayaquil</option>
+            <option value="CUE">Cuenca</option>
+          </select>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label fw-bold text-warning">Sector de Entrega</label>
+          <input type="text" class="form-control bg-dark text-light border-warning" id="usuSectorEntrega" required />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label fw-bold text-warning">Rol</label>
+          <select id="usuRol" class="form-select bg-dark text-light border-warning" required>
+            <option value="">Seleccione un rol</option>
+            <option value="CLI">Cliente</option>
+            <option value="ADM">Administrador</option>
+          </select>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label fw-bold text-warning">Contraseña</label>
+          <input type="password" class="form-control bg-dark text-light border-warning" id="usuPassword" required />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label fw-bold text-warning">Género</label>
+          <select id="usuGenero" class="form-select bg-dark text-light border-warning" required>
+            <option value="">Seleccione</option>
+            <option value="M">Masculino</option>
+            <option value="F">Femenino</option>
+            <option value="O">Otro</option>
+          </select>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label fw-bold text-warning">Fecha de Registro</label>
+          <input type="text" class="form-control bg-dark text-light border-warning" id="usuFechaRegistro" disabled />
+        </div>
+
+        <div class="d-flex justify-content-between mt-3">
+          <button type="submit" class="btn btn-warning fw-bold">
+            <i class="bi bi-check-circle-fill"></i> Guardar Cambios
+          </button>
+          <a href="/paginas/Usuarios/Index.html" class="btn btn-outline-warning fw-bold">
+            <i class="bi bi-arrow-left-circle-fill"></i> Cancelar
+          </a>
+        </div>
+      </div>
+    </form>
+  </div>
+
+  <!-- Footer -->
+  <div id="footer-placeholder" class="mt-5"></div>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      // Cargar header y footer con jQuery
+      $("#header-placeholder").load("/paginas/Shared/Header.html");
+      $("#footer-placeholder").load("/paginas/Shared/Footer.html");
+
+      const ciRuc = new URLSearchParams(window.location.search).get("id");
+      if (!ciRuc) {
+        alert("❌ No se proporcionó ID de usuario.");
+        return;
+      }
+
+      // Cargar datos del usuario y login
+      fetch(`http://eltragolocorest.runasp.net/api/Usuario?ciRuc=${ciRuc}`)
+        .then(res => {
+          if (!res.ok) throw new Error("Usuario no encontrado");
+          return res.json();
+        })
+        .then(usuario => {
+          document.getElementById("usuCiRuc").value = usuario.USU_CI_RUC || "N/D";
+          document.getElementById("usuNombre").value = usuario.USU_NOMBRE || "";
+          document.getElementById("usuEmail").value = usuario.USU_EMAIL || "";
+          document.getElementById("usuTelefono").value = usuario.USU_TELEFONO || "";
+          document.getElementById("usuDireccion").value = usuario.USU_DIRECCION || "";
+          document.getElementById("usuCiudad").value = usuario.USU_CIUDAD || "";
+          document.getElementById("usuSectorEntrega").value = usuario.USU_SECTOR_ENTREGA || "";
+          document.getElementById("usuGenero").value = usuario.USU_GENERO || "";
+
+          const fecha = new Date(usuario.USU_FECHA_REGISTRO);
+          document.getElementById("usuFechaRegistro").value =
+            isNaN(fecha) ? "Fecha no disponible" : fecha.toLocaleDateString() + " " + fecha.toLocaleTimeString();
+        })
+        .catch(err => {
+          console.error(err);
+          alert("❌ No se pudo obtener el detalle del usuario.");
+        });
+
+      fetch(`http://eltragolocorest.runasp.net/api/Login/Usuario/${ciRuc}`)
+        .then(res => {
+          if (!res.ok) throw new Error("Datos de login no encontrados");
+          return res.json();
+        })
+        .then(login => {
+          document.getElementById("usuPassword").value = login.PASSWORD || "";
+          document.getElementById("usuRol").value = login.LOG_ROL || "";
+        })
+        .catch(err => {
+          console.error(err);
+          alert("❌ No se pudo obtener la contraseña y rol del usuario.");
+          document.getElementById("usuPassword").value = "";
+          document.getElementById("usuRol").value = "";
+        });
+
+      const form = document.getElementById('editarUsuarioForm');
+      form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+
+        const telefono = document.getElementById('usuTelefono').value;
+        if (telefono.length < 10) {
+          alert("⚠️ El teléfono debe tener al menos 10 caracteres.");
+          return;
+        }
+
+        // Preparamos los datos para las APIs, sin fecha ni estado
+        const datosUsuario = {
+          USU_CI_RUC: document.getElementById('usuCiRuc').value,
+          USU_NOMBRE: document.getElementById('usuNombre').value,
+          USU_EMAIL: document.getElementById('usuEmail').value,
+          USU_TELEFONO: telefono,
+          USU_DIRECCION: document.getElementById('usuDireccion').value,
+          USU_CIUDAD: document.getElementById('usuCiudad').value,
+          USU_SECTOR_ENTREGA: document.getElementById('usuSectorEntrega').value,
+          USU_GENERO: document.getElementById('usuGenero').value
+        };
+
+        const datosLogin = {
+          USU_CI_RUC: document.getElementById('usuCiRuc').value,
+          PASSWORD: document.getElementById('usuPassword').value,
+          LOG_ROL: document.getElementById('usuRol').value
+        };
+
+        try {
+          const resUsuario = await fetch(`http://eltragolocorest.runasp.net/api/Usuario?ciRuc=${datosUsuario.USU_CI_RUC}`, {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(datosUsuario)
+          });
+          if (!resUsuario.ok) throw new Error('No se pudo actualizar la información del usuario.');
+
+          const resLogin = await fetch('http://eltragolocorest.runasp.net/api/Login/Actualizar', {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(datosLogin)
+          });
+          if (!resLogin.ok) throw new Error('No se pudo actualizar el login del usuario.');
+
+          alert("✅ Usuario y login actualizados correctamente.");
+          window.location.href = "/paginas/Usuarios/Index.html";
+        } catch (error) {
+          alert("❌ " + error.message);
+        }
+
+      });
+    });
+  </script>
+</body>
+
+</html>
